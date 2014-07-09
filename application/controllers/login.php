@@ -30,17 +30,22 @@ class Login extends CI_Controller
 		$password = $this->input->post('users_password');
 		$tmp = do_hash($password, 'md5');
 		$passwordMD5 = do_hash($salt.$tmp, 'md5'); // MD5
-
-		$this->users->login($email, $passwordMD5);
-		if($this->session->userdata('users_id') != null)
+		$temp=$this->users->login($email, $passwordMD5);
+		if($temp != 0)
 		{
-			redirect($ref,'refresh');
+			switch($temp){
+				case 1:
+					$data['title']="ERROR   |   WPILIFE";
+					$data['info']="You are not activated!";
+					$this->load->view("templates/msgDisplay",$data);
+					break;
+				case 2:
+					echo "<script> alert ('Email or Password Wrong! = (');</script>";
+					echo "<script> window.location.href = '".base_url()."login/?ref=".$ref."';</script>";
+					break;
+			}
 		}
-		else
-		{
-			echo "<script>alert('Email or Password Error! =(');</script>";
-			echo "<script>window.location.href = '".base_url()."login/?ref=".$ref."';</script>";
-		}
+		redirect($ref,'refresh');
 	}
 
 
@@ -81,8 +86,8 @@ class Login extends CI_Controller
 		$hashStr = do_hash($extraAuth, 'md5');
 
 		$dataArray= array(
-				'random_string' => $randString,
-				'extra_field'	=> $hashStr
+				'link'	=> $hashStr,
+				'expire_date' => date('Y-m-d H:i:s',strtotime("+1 day")),
 			);
 		if($this->users->userPasswdInfoUpdate($dataArray, $email) == 1){
 			$this->sendPasswordResetEmail($email, $hashStr);
@@ -125,30 +130,82 @@ class Login extends CI_Controller
 		$this->email->message($message);	
 		$this->email->send();
 	}
+	
+	public function activeuser($link=''){
+			$user_id=$this->users->finduseridbylink($link);		
+			if($user_id>0){
+				$query=$this->db->query("SELECT *
+													FROM active_link
+													WHERE link='".$link."'");
+				$thislink=$query->row_array();
+				$today=date('Y-m-d H:i:s');
+				if(strtotime($today) < strtotime($thislink['expire_date'])){
+					if ($thislink['type']==0){
+						$this->db->query('UPDATE users SET users_activated=1 WHERE users_id='.$user_id); 
+						if($this->db->affected_rows()>0)
+						{ 
+							$data['title']="Activation Successful! |  WPILIFE";
+							$data['info']="This account is successfully activated!";
+							$this->db->query("DELETE FROM active_link
+																WHERE link='".$link."'");
+						}
+						else
+						{
+							$data['title']="Oops! |  WPILIFE";
+							$data['info']="Oops! An error has happened (Update fail), please contact us if this problem shows again";
+						}
+					}
+					else{
+						$data['title']="Oops! |  WPILIFE";
+						$data['info']="Oops! Wrong link type!";
+					}
+				}
+				else{
+					$data['title']="Oops! |  WPILIFE";
+					$data['info']="Oops! This link is expired!";
+				}
+			}
+			else{
+				$data['title']="Oops! |  WPILIFE";
+				$data['info']="It seems that this link is wrong".$user_id;
+			} 
+			$this->load->view('templates/msgDisplay',$data);
+		} 
 
 	function passwdReset($hashStr){
-		list($email, $user_id) = $this->users->hashStrCheckAndReturnEmail($hashStr);
-		if($email){
-
-			$data['title'] = "Password Reset| WPILIFE";
-			$data['hashStr'] = $hashStr;
-			$data['email'] = $email;
-			$data['user_id'] = $user_id;
-			$this->load->view('base/forgetReset',$data);
-			//echo $email . " " .$user_id;
-		} else {
-			switch ($user_id) {
-				case '2':
-					$data['info'] = "You password reset link is expired!";
-					break;
-
-				default:
-					$data['info'] = "You password reset link is wrong!";
-					break;
+		$user_id=$this->users->finduseridbylink($hashStr);		
+			if($user_id>0){
+				$query=$this->db->query("SELECT *
+													FROM active_link
+													WHERE link='".$hashStr."'");
+				$thislink=$query->row_array();
+				$today=date('Y-m-d H:i:s');
+			//	$data['title']='debug';
+			//	$data['info']='DDDDDDDebug!';
+				if(strtotime($today) < strtotime($thislink['expire_date'])){
+					if ($thislink['type']==1){
+						$data['hashStr'] = $hashStr;
+						//$data['email'] = $email;
+						$data['user_id'] = $user_id;
+					//	$this->db->query("DELETE FROM active_link
+					//										WHERE link='".$hashStr."'");
+						$this->load->view('base/forgetReset',$data);
+					}
+					else{
+						$data['title']="Oops! |  WPILIFE";
+						$data['info']="Oops! Wrong link type!";
+					}
+				}
+				else{
+					$data['title']="Oops! |  WPILIFE";
+					$data['info']="Oops! This link is expired!";
+				}
 			}
-			$data['title'] = "Error Link | WPILIFE";
+			else{
+				$data['title']="Oops! |  WPILIFE";
+				$data['info']="It seems that this link is wrong".$user_id;
+			} 
 			$this->load->view('templates/msgDisplay',$data);
-		}
 	}
 
 	function reset(){
@@ -161,20 +218,21 @@ class Login extends CI_Controller
 			echo "<script>window.location.href = '".base_url()."login/passwdReset/".$code."';</script>";
 		} else {
 			$user_id = $this->input->post('id', TRUE);
-			$email = $this->input->post('email');
+			//$email = $this->input->post('email');
 
 			$salt = $this->config->item('encryption_key');
 			$tmp = do_hash($newPasswd, 'md5'); 
 			$passwordMD5 = do_hash($salt.$tmp, 'md5'); 
 
-			$dataArray = array(
-				'users_password'=>$passwordMD5,
-				'extra_field' 	=> ''
-				);
-			$this->users->userPasswordUpdate($dataArray, $user_id, $email);
-
-			$data['title'] = "Password Reset Successfully | WPILIFE";
-			$data['info'] = "Your password has been updated successfully!";
+			$num=$this->users->userPasswordReset($passwordMD5, $user_id,$code);
+			if($num==1){
+				$data['title'] = "Password Reset Successfully | WPILIFE";
+				$data['info'] = "Your password has been updated successfully!";
+			}
+			else{
+				$data['title']="An Error has happened     |    WPILIFE";
+				$data['info']="Oops! There's an error has happened!";
+			}
 			$this->load->view('templates/msgDisplay',$data);
 		}
 

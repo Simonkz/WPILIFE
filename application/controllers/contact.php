@@ -52,10 +52,10 @@ class Contact extends CI_Controller
 	function send_email($form_data)
 	{
 		//https://exchange.wpi.edu/owa/
-		$this->email->from('wpilife@gmail.com', 'WPILIFE');
-		$this->email->to('zhouhao@wpilife.org'); 
-		$this->email->subject('Comments | WPILIFE');
-		$message = "Hi my Lord,<br/>
+		$this->email->from('no-reply@wpilife.org', 'WPILIFE');
+		$this->email->to('wpilife@gmail.com'); 
+		$this->email->subject("There's an idiot leaves a message!");
+		$message = "Hi someone who cares,<br/>
 					Comment is coming as below:<br/>
 					-----------------------------------------------<br/>
 					From ".$form_data['name']."(".$form_data['email'].") <br/>

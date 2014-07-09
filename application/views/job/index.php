@@ -88,16 +88,6 @@
 		}
 	?>
 
-		<div class="sixteen columns">
-			<!-- Pagination -->
-			<nav class="pagination">
-				<ul>
-					<?php echo $pagination;?>
-				</ul>
-				<div class="clearfix"></div>
-			</nav>
-		</div>
-
 	</div>
 	<!-- Page Content / End -->
 

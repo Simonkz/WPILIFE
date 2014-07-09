@@ -20,9 +20,15 @@ class Signup extends CI_Controller
 
 	function submit()
 	{
-		// generate password
 		$salt = $this->config->item('encryption_key');
-		$password = random_string('alnum', 8);
+		$password = $this->input->post('users_password');
+		$cfm_pwd = $this->input->post('cfm_users_password');
+		if($password != $cfm_pwd) {
+			$data['title']='Error   |   WPILIFE';
+			$data['info'] = 'Password does not match!';
+			$this->load->view('templates/msgDisplay',$data);
+			return;
+		}
 		$tmp = do_hash($password, 'md5'); 
 		$passwordMD5 = do_hash($salt.$tmp, 'md5'); 
 
@@ -38,20 +44,25 @@ class Signup extends CI_Controller
 						'users_firstname' 		=> $this->input->post('users_firstname'),
 						'users_lastname' 		=> $this->input->post('users_lastname'),
 						'users_password' 		=> $passwordMD5,
+						'users_activated' 	=> 0,
 						);
-
-				$this->users->addNewUser($userDataArray);
-
-				// send passcode to costomer
-				$this->sendPasswordEmail($email,$password);
-				$data['title'] = "Sign Up successfully | WPILIFE";
-				$data['info'] = "Succeed<br/>The password has been sent to your email";
+				$link=$this->users->addNewUser($userDataArray);
+				if(strlen($link)==32){
+					// send passcode to costomer
+					$this->sendActivationEmail($email,base_url().'login/activeuser/'.$link);
+					$data['title'] = "Sign Up successfully | WPILIFE";
+					$data['info'] = "Succeed<br/>An e-mail contains active link  has been sent to your email";
+				}
+				else{
+					$data['title']="Oops   |     WPILIFE";
+					$data['info']="An Error has happened, if this problem shows again, please contact us";
+				}
 			}
 			else
 			{
 				$data['title'] = "Sign Up failed | WPILIFE";
 				$data['info'] = "Failed<br/>Email is not valid <br/>Or<br/> you have registered before!";
-			}
+			} 
 		}
 		else
 		{
@@ -67,20 +78,20 @@ class Signup extends CI_Controller
 	function isEmailValid($email)
 	{
 		$this->load->helper('email');
-		//$email_subfix = explode("@", $email);
+		$email_subfix = explode("@", $email);
 
 		//check whether it is a wpi email address
-		//if(isset($email_subfix[1]) && $email_subfix[1] == 'wpi.edu')
-		//{
+		if(isset($email_subfix[1]) )//&& $email_subfix[1] == 'wpi.edu')
+		{
 			if (valid_email($email) && !$this->users->isEmailDuplicated($email))
 			{
 				return true;
 			}
-		//}
+		}
 		return false;
 	}
 
-	function sendPasswordEmail($to_email, $password)
+	function sendActivationEmail($to_email, $password)
 	{
 		$this->load->library('parser');
 		$this->email->from('no-reply@wpilife.org', 'WPILIFE');
@@ -100,5 +111,5 @@ class Signup extends CI_Controller
 		
 	}
 		
-}
+} 
 ?>

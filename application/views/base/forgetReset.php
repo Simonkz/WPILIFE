@@ -14,7 +14,7 @@
 	<?php 
 		echo br(2);
 		echo form_open("login/reset");
-		echo form_hidden('email', $email);
+//		echo form_hidden('email', $email);
 		echo form_hidden('id', $user_id);
 		echo form_hidden('code', $hashStr);
 	?>
@@ -26,7 +26,7 @@
 					<td class="input"><input type="password" name="cfmpasswd" placeholder="Confirm Password" autocomplete="off" required="required" /></td>
 				</tr>
 				<tr>
-					<td><input type="submit" value="Password Reset" title="Password Reset for <?php echo $email; ?>" /></td>
+					<td><input type="submit" value="Password Reset" title="Password Reset" /></td>
 				</tr>
 			</table>
 		<?php echo form_close(br(2)); ?>

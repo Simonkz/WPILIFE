@@ -13,7 +13,7 @@ class Ext extends CI_Controller  {
 	function job($id = 0) {
 		if(!is_numeric($id) || $id == 0){
 			$data['title'] = "Job Opportunity";
-			$data['job_list'] = $this->joboppolib->get_job_opportunity_list(true, 0, 20);
+			$data['job_list'] = $this->joboppolib->get_job_opportunity_list(true, 0, 200);
 			$this->load->view('job/index',$data);
 		} else {
 			$data['title'] =  $this->joboppolib->get_job_name_by_id($id);

@@ -7,6 +7,38 @@ class Users
 	{	
 		$this->CI =& get_instance();
 	}
+	
+	public function finduseridbylink($link){
+		if(strlen($link)==32){
+			$this->CI->db->where('link', $link);
+			$query = $this->CI->db->get('active_link');
+			if($query-> num_rows()>0){
+				$rows = $query->row_array();
+				return $rows['user_id'];
+			}
+			else{
+				return -1;
+			}
+		}
+		else{
+			return -1;
+		}
+		
+	}
+	
+	
+	public function finduseridbyemail($email){
+			$this->CI->db->where('users_email_address', $email);
+			$query = $this->CI->db->get('users');
+			if($query-> num_rows()>0){
+				$rows = $query->row_array();
+				return $rows['users_id'];
+			}
+			else{
+				return -1;
+			}
+		
+	}
 
 	public function isEmailExist($email)
 	{
@@ -51,7 +83,26 @@ class Users
 	public function addNewUser($userDataArray)
 	{
 		$this->CI->db->insert('users',$userDataArray);
+		$query=$this->CI->db->query("SELECT users_id FROM users WHERE users_email_address='".$userDataArray['users_email_address']."'");
+		if($query->num_rows()==1){
+			$active_link = random_string('alnum',32);
+			$expire_date=date('Y-m-d H:i:s',strtotime("+1 day"));
+			$newuser=$query->row_array();
+			$userActiveArray = array(
+						'link' => $active_link,
+						'user_id' => $newuser['users_id'],
+						'expire_date' => $expire_date,
+						'type' => 0,
+						);
+			$this->CI->db->insert('active_link',$userActiveArray);
+			return $active_link;
+		}
+		else{
+			return '';
+		}
 	}
+	
+	
 
 	public function updateRecentLoginTime($user_id)
 	{
@@ -65,34 +116,37 @@ class Users
 	{
 		$this->CI->db->where('users_email_address', $email);
 		$this->CI->db->where('users_password', $password);
-		$this->CI->db->where('users_activated',1);
-		$this->CI->db->select('users_id, users_firstname, users_photo');
+	//	$this->CI->db->where('users_activated',1);
 		$query = $this->CI->db->get('users');
 
 		if ($query->num_rows() > 0)
 		{
 			$row = $query->row_array(); 
-
-			$this->CI->session->set_userdata('users_email', $email);
-			$this->CI->session->set_userdata('users_id', $row['users_id']);
-			$this->CI->session->set_userdata('users_firstname', $row['users_firstname']);
-			$this->CI->session->set_userdata('users_avatar', $row['users_photo']);
+			if($row['users_activated']){
+				$this->CI->session->set_userdata('users_email', $email);
+				$this->CI->session->set_userdata('users_id', $row['users_id']);
+				$this->CI->session->set_userdata('users_firstname', $row['users_firstname']);
+				$this->CI->session->set_userdata('users_avatar', $row['users_photo']);
 			
-			//generate session for CSSA officer_title_update
-			$cssa_query = $this->CI->db->query("SELECT id 
+				//generate session for CSSA officer_title_update
+				$cssa_query = $this->CI->db->query("SELECT id 
 											    FROM cssa_manager_list 
 											    WHERE user_id = ". $row['users_id'] );
-			if ($cssa_query->num_rows() > 0)
-			{
-				$cssa_row = $cssa_query->row_array(); 
-				$this->CI->session->set_userdata('cssa_id', $cssa_row['id']);
+				if ($cssa_query->num_rows() > 0)
+				{
+					$cssa_row = $cssa_query->row_array(); 
+					$this->CI->session->set_userdata('cssa_id', $cssa_row['id']);
+				}
+				$this->updateRecentLoginTime($row['users_id']);
+				return 0;   	
 			}
-			$this->updateRecentLoginTime($row['users_id']);
-			return true;	
+			else
+			{
+				return 1;
+			}
 		}
-		else
-		{
-			return false;
+		else{
+			return 2;
 		}	
 	}
 
@@ -116,9 +170,19 @@ class Users
 	// update data filed which will be used to generate password reset link
 	public function userPasswdInfoUpdate($dataArray, $email){
 		$email = trim($email);
-		$this->CI->db->where('users_email_address', $email);
-		$this->CI->db->update('users', $dataArray);
-		return $this->CI->db->affected_rows();
+		$user_id=$this->finduseridbyemail($email);
+		if($user_id>0){
+			$data=array('link' => $dataArray['link'],
+									'user_id' => $user_id,
+									'expire_date' => $dataArray['expire_date'],
+									'type' => 1,
+									);
+			$this->CI->db->insert('active_link', $data);
+			return $this->CI->db->affected_rows();
+		}
+		else{
+			return -1;
+		}
 	}
 
 	public function hashStrCheckAndReturnEmail($hashStr){
@@ -166,15 +230,28 @@ class Users
 		return $this->CI->db->affected_rows();
 	}
 
-	public function user_password_update($newPassword, $users_id)
+	public function user_password_update($newPasswordMD5, $users_id)
 	{
-		$dataArray = array('users_password'=>$newPassword);
+		$dataArray = array('users_password'=>$newPasswordMD5);
 		$users_id = $this->CI->security->xss_clean($users_id);
 		$this->CI->db->where('users_id', $users_id);
 		$this->CI->db->update('users', $dataArray);
 		return $this->CI->db->affected_rows();
 	}
-
+	public function userPasswordReset($passwordArray, $user_id, $code){
+		$this->CI->db->where('link',$code);
+		$query=$this->CI->db->get('active_link');
+		$row=$query->row_array();
+		$rows_affected=0;
+		$today=date('YMD H:i:s');
+		if($row['user_id']==$user_id && $row['type']==1 && strtotime($today)<strtotime($row['expire_date'])){ // add expire_date checking here!
+			$rows_affected=$this->user_password_update($passwordArray,$user_id);
+			$this->CI->db->query("DELETE FROM active_link WHERE link='".$code."'");
+		}
+		
+		return $rows_affected;
+		
+	}
 	public function userPasswordUpdate($passwordArray, $user_id, $email){
 		
 		$user_id = $this->CI->security->xss_clean($user_id);

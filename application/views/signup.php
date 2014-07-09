@@ -37,6 +37,10 @@
 					<td class="input"><input type="email" name="users_email_address" placeholder="Your E-mail" autocomplete="off" required="required" /></td>
 				</tr>
 				<tr>
+					<td class="input"><input type="password" name="users_password" placeholder="Your Password" autocomplete="off" required="required" /></td>
+					<td class="input"><input type="password" name="cfm_users_password" placeholder="Confirm Your Password" autocomplete="off" required="required" /></td>
+				</tr>
+				<tr>
 					<td class="input">
 						<input type="text" name="captcha" placeholder="Input the code" autocomplete="off" required="required" />
 						<span id="captchaCode"><?php echo $captcha['image'];?></span>
