@@ -244,7 +244,7 @@ class Users
 		$row=$query->row_array();
 		$rows_affected=0;
 		$today=date('YMD H:i:s');
-		if($row['user_id']==$user_id && $row['type']==1 && strtotime($today)<strtotime($row['expire_date'])){ // add expire_date checking here!
+		if($row['user_id']==$user_id && $row['type']==1 && strtotime($today)<strtotime($row['expire_date'])){ 
 			$rows_affected=$this->user_password_update($passwordArray,$user_id);
 			$this->CI->db->query("DELETE FROM active_link WHERE link='".$code."'");
 		}

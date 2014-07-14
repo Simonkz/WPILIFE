@@ -45,7 +45,9 @@ class Login extends CI_Controller
 					break;
 			}
 		}
-		redirect($ref,'refresh');
+		else{
+			redirect($ref,'refresh');
+		}
 	}
 
 
@@ -180,8 +182,8 @@ class Login extends CI_Controller
 													WHERE link='".$hashStr."'");
 				$thislink=$query->row_array();
 				$today=date('Y-m-d H:i:s');
-			//	$data['title']='debug';
-			//	$data['info']='DDDDDDDebug!';
+				$data['title']='Password Reset';
+				$data['info']='';
 				if(strtotime($today) < strtotime($thislink['expire_date'])){
 					if ($thislink['type']==1){
 						$data['hashStr'] = $hashStr;
@@ -190,6 +192,7 @@ class Login extends CI_Controller
 					//	$this->db->query("DELETE FROM active_link
 					//										WHERE link='".$hashStr."'");
 						$this->load->view('base/forgetReset',$data);
+						return;
 					}
 					else{
 						$data['title']="Oops! |  WPILIFE";
