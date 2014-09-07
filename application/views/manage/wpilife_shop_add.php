@@ -67,7 +67,7 @@
 						<table width="100%">
 							<tr>
 								<td>
-								    Set your Item image cover: <br/><input type="file" name="userfile" required="required" />
+								    Set your Item image cover: <font color="red"> （请选择图片作为封面，pdf和word格式暂未开通）</font> <br/> <input type="file" name="userfile" required="required" />
 								</td>
 							</tr>
 							<tr>

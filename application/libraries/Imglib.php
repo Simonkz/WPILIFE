@@ -9,7 +9,7 @@ class Imglib
 		$this->CI->load->helper('security');
 	}
 
-	public function ImageUpload($sizeLimit = 3072,$widthLimit = 3000, $heightLimit =3000 )
+	public function ImageUpload($sizeLimit = 9999,$widthLimit = 9999, $heightLimit = 9999 ) //default sizeLimit=3072 widthLimit=3k heightLimit=3k 
 	{
 		$config['upload_path'] = $_SERVER['DOCUMENT_ROOT'].'/images/shop/';
 		$config['allowed_types'] = 'gif|jpg|png|bmp';

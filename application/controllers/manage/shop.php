@@ -20,7 +20,14 @@ class Shop extends CI_Controller
 	function upload()
 	{
 		$this->load->library('imglib');
-		$returnInfo = $this->imglib->ImageUpload();
+	//	echo $_FILES['file']['name'];
+		if(!isset($_FILE['file']['error']) || is_array($_FILE['file']['error'])){
+			$returnInfo['key'] = $this->imglib->ImageUpload();
+			$returnInfo['data']['file_name'] = "";
+		} 
+		else{
+			$returnInfo = $this->imglib->ImageUpload();
+		}
 		if($returnInfo['key'] == true)
 		{
 			$image = $returnInfo['data']['file_name'];
@@ -40,7 +47,9 @@ class Shop extends CI_Controller
 		}
 		else
 		{
-			redirect('manage/shop/myList','refresh');
+			$data['info'] = "There's an error happened!".$returnInfo['data'];
+			$data['title'] = "WPILIFE    |      ERROR!";
+			$this->load->view('templates/msgDisplay',$data);
 		}
 		
 	}
