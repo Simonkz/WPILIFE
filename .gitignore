@@ -14,7 +14,8 @@ application/config/email.php
 phpinfo.php
 php.ini
 *.swp
-
+!images/shop/no_cover.png
+!images/shop/no_cover_small.png
 elfinder/files/*
 
 files/*
