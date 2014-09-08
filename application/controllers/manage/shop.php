@@ -82,9 +82,11 @@ class Shop extends CI_Controller
 		$returnInfo = $this->imglib->ImageUpload();
 		if($returnInfo['key'] == true)
 		{
-			//delete the previous image for this product (and thumb)
-			unlink($_SERVER['DOCUMENT_ROOT'].'/images/shop/'.$this->input->post('shop_image_cover'));
-			unlink($_SERVER['DOCUMENT_ROOT'].'/images/shop/'.substr_replace($this->input->post('shop_image_cover'), '_small', -4, 0));
+			if($this->input->post('shop_image_cover')!='no_cover.png'){ //do not delete no_cover.png
+				//delete the previous image for this product (and thumb)
+				unlink($_SERVER['DOCUMENT_ROOT'].'/images/shop/'.$this->input->post('shop_image_cover'));
+				unlink($_SERVER['DOCUMENT_ROOT'].'/images/shop/'.substr_replace($this->input->post('shop_image_cover'), '_small', -4, 0));
+			}
 			$image = $returnInfo['data']['file_name'];
 			$thumbImage = $this->imglib->createThumb($image, '/images/shop/', 400, 325);
 			$dataArray = array(
