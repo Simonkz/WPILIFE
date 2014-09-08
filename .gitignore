@@ -13,7 +13,7 @@ application/config/email.php
 10a4d5d0d9.txt
 phpinfo.php
 php.ini
-
+*.swp
 
 elfinder/files/*
 
