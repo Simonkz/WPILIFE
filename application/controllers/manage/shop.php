@@ -21,37 +21,41 @@ class Shop extends CI_Controller
 	{
 		$this->load->library('imglib');
 	//	echo $_FILES['file']['name'];
-		if(!isset($_FILE['file']['error']) || is_array($_FILE['file']['error'])){
-			$returnInfo['key'] = $this->imglib->ImageUpload();
-			$returnInfo['data']['file_name'] = "";
+		if(!isset($_FILES['userfile']) || $_FILES['userfile']['tmp_name']==NULL || !isset($_FILES['userfile']['tmp_name'])){
+			$returnInfo['key'] = true;
+			$image = "no_cover.png";
+			$thumbImage = true;
 		} 
 		else{
 			$returnInfo = $this->imglib->ImageUpload();
+			if($returnInfo['key'] == true){
+				$image = $returnInfo['data']['file_name'];
+				if(!$this->imglib->createThumb($image, '/images/shop/', 400, 325)){
+					$data['info'] = "ERROR in Crop";
+					$data['title']='WPILIFE   |    Error'.$_FILES['userfile']['tmp_name'];
+					$this->load->view('templates/msgDisplay',$data);
+					return ; 
+				}
+			}
+			else{
+			$data['info'] = "There's an error happened!".$returnInfo['data'];
+			$data['title'] = "WPILIFE    |      ERROR!";
+			$this->load->view('templates/msgDisplay',$data);
+			return;
+			}
 		}
-		if($returnInfo['key'] == true)
-		{
-			$image = $returnInfo['data']['file_name'];
-			$thumbImage = $this->imglib->createThumb($image, '/images/shop/', 400, 325);
-			$dataArray = array(
-				'shop_type'		=> $this->input->post('shop_type'),
-				'shop_title' 		=> $this->input->post('shop_title'),
-				'shop_price' 		=> $this->input->post('shop_price'),
-				'shop_content' 	=> $this->input->post('content'),
-				'user_id'		=> $this->session->userdata('users_id'),
-				'shop_image_cover'	=> $image,
-				'shop_date' 	=> date("Y-m-d H:i:s"),
+		$dataArray = array(
+			'shop_type'		=> $this->input->post('shop_type'),
+			'shop_title' 		=> $this->input->post('shop_title'),
+			'shop_price' 		=> $this->input->post('shop_price'),
+			'shop_content' 	=> $this->input->post('content'),
+			'user_id'		=> $this->session->userdata('users_id'),
+			'shop_image_cover'	=> $image,
+			'shop_date' 	=> date("Y-m-d H:i:s"),
 			);
 
 			$this->shoplib->shop_add($dataArray);
 			redirect('manage/shop/myList','refresh');
-		}
-		else
-		{
-			$data['info'] = "There's an error happened!".$returnInfo['data'];
-			$data['title'] = "WPILIFE    |      ERROR!";
-			$this->load->view('templates/msgDisplay',$data);
-		}
-		
 	}
 	
 	function myList()
@@ -111,7 +115,7 @@ class Shop extends CI_Controller
 			$dataArray = array('shop_id' => $shop_id, 'user_id' => $this->session->userdata('users_id'));
 			$image =  $this->shoplib->get_image($dataArray);
 			//die($image);
-			if($this->db->delete('shop', $dataArray))
+			if($this->db->delete('shop', $dataArray)&& $image!="no_cover.png") //do not delete the no_cover.png
 			{
 				//delete the previous image for this product (and thumb)
 				unlink($_SERVER['DOCUMENT_ROOT'].'/images/shop/'.$image);
