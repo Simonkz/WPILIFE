@@ -12,7 +12,7 @@ class Shop extends CI_Controller
 	public function index($page = 1)
 	{
 		$data['title'] = "Shop | WPILIFE";
-		$pageSize = 12;
+		$pageSize = 10;
 		$listCount = $this->shoplib->get_list_count('SELL');
 		$data['shop_list'] = $this->shoplib->get_shop_list('SELL',true, $pageSize*($page-1),$pageSize);
 		$data['pagination'] = $this->paginationlib->get_pagination(base_url().'wpilife/shop/', $listCount, $pageSize);

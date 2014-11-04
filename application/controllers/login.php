@@ -36,7 +36,7 @@ class Login extends CI_Controller
 			switch($temp){
 				case 1:
 					$data['title']="ERROR   |   WPILIFE";
-					$data['info']="You are not activated! If you cannot receive active link, please contact me with you email address.<br/><a href='mailto:kwang3@wpi.edu'>Click Here to write to me</a><br/>如果不能收到激活邮件，请将你的注册邮箱发送至<a href='mailto:kwang3@wpi.edu'>Admin</a>，我们会手动激活您的账号";
+					$data['info']="You are not activated!";
 					$this->load->view("templates/msgDisplay",$data);
 					break;
 				case 2:
