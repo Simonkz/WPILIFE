@@ -35,5 +35,21 @@ class Ext extends CI_Controller  {
 		$job_list = $this->joboppolib->get_job_opportunity_list(true, 0, 20);
 		var_dump($job_list);
 	}
+
+	function email() {
+		$this->load->library('email');
+
+		$this->email->from('webmaster@wpilife.org', 'WPILIFE');
+		$this->email->to('royhzhou@gmail.com'); 
+		//$this->email->cc('another@another-example.com'); 
+		//$this->email->bcc('them@their-example.com'); 
+
+		$this->email->subject('Email Test');
+		$this->email->message('Testing the email class.');	
+
+		$this->email->send();
+
+		echo $this->email->print_debugger();
+	}
 }
 ?>

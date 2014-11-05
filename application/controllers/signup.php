@@ -51,7 +51,7 @@ class Signup extends CI_Controller
 					// send passcode to costomer
 					$this->sendActivationEmail($email,base_url().'login/activeuser/'.$link);
 					$data['title'] = "Sign Up successfully | WPILIFE";
-					$data['info'] = "Succeed<br/>An e-mail contains active link  has been sent to your email";
+					$data['info'] = "Succeed<br/>An e-mail contains active link has been sent to your email<br/>Mailserver is down: In case you can't receive the email , please write to <a href='mailto:kwang3@wpi.edu'>me</a> with your email and name<br/>如果没有收到邮件，请<a href='mailto:kwang3@wpi.edu'>点此处</a>告诉我们你的姓名和邮箱，我们会为您手动激活";
 				}
 				else{
 					$data['title']="Oops   |     WPILIFE";
