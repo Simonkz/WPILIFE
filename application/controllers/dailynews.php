@@ -12,7 +12,7 @@
 		{
 			$today = date('Y-m-d')." 21:00:00";
 			$yesterday = date('Y-m-d',strtotime("-7 days"));
-			$query = $this->db->query("SELECT * FROM `shop` WHERE shop_date BETWEEN ? AND ?", array($yesterday,$today));
+			$query = $this->db->query("SELECT * FROM `shop` WHERE shop_date BETWEEN ? AND ? ORDER BY shop_date DESC", array($yesterday,$today));
 			$shop_list="";
 			foreach ($query->result() as $item)
 			{
