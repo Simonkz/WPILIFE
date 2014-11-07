@@ -72,7 +72,7 @@
 
 	<div class="container" style="overflow: hidden;">
 	<h1> <?php echo $today?></h1>
-	<p></p>
+	<p><?php echo $msg?></p>
 	{sell_list}
 	</div>
 
