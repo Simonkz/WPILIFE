@@ -62,7 +62,7 @@
 			$this->email->to('cssa@wpi.edu'); 
 			$this->email->subject('WPILIFE 每日精选');
 			$this->email->set_alt_message("This is an HTML email, please enable your client's support for HTML email to view the full message");
-			$msg = file_get_contents("msg.txt");
+			$msg = file_get_contents($_SERVER['DOCUMENT_ROOT']."/msg.txt");
 			$data = array(
 				'today'		=>date('Y-m-d'),
 				"msg" =>$msg ,
