@@ -12,7 +12,7 @@
 		{
 			$today = date('Y-m-d')." 21:00:00";
 			$yesterday = date('Y-m-d',strtotime("-7 days"));
-			$query = $this->db->query("SELECT * FROM `shop` WHERE shop_date BETWEEN ? AND ? ORDER BY shop_date DESC", array($yesterday,$today));
+			$query = $this->db->query("SELECT * FROM `shop` WHERE shop_type='SELL' AND shop_date BETWEEN ? AND ? ORDER BY shop_date DESC", array($yesterday,$today));
 			$shop_list="";
 			foreach ($query->result() as $item)
 			{
@@ -25,18 +25,18 @@
 				);
 				$shop_list = $shop_list.$this->parser->parse('templates/dailynews_email/shop_item', $data, TRUE);
 			}
+			$query = $this->db->query("SELECT * FROM bbs WHERE bbs_time BETWEEN ? AND ? ORDER BY bbs_time DESC", array(date('Y-m-d',strtotime("-15 days")), $today));
+			$msg = file_get_contents($_SERVER['DOCUMENT_ROOT']."/msg.txt");
 			$data = array(
 				'sell_list'  => $shop_list,
 				'today'      => $today,
+				'bbs_list' =>$query->result_array(),
+				'msg'=>$msg
 			);
-			$this->sendDailyNewsEmail($shop_list);
-			//$msg = array('title' => 'title', 'info'=>$info);
-			//$this->load->view('templates/msgDisplay',$msg);
-			//$this->send_to_person($shop_list, 'han0122@gmail.com');
-			//$this->send_to_person($shop_list, 'kwang3@wpi.edu');
-			//$this->send_to_person($shop_list, 'ahan0122@hotmail.com');
-			//$this->send_to_person($shop_list, 'wpilife@gmail.com');
-			$this->load->view('templates/send_daily_news',$data);
+			$query = $this->db->query("SELECT * FROM `shop` WHERE shop_type='BUY' AND shop_date BETWEEN ? AND ? ORDER BY shop_date DESC", array($yesterday,$today));
+			$data["demand_list"] = $query->result_array();
+			$this->sendDailyNewsEmail($data);
+			$this->load->view('templates/dailynews_email/dailynews_email_body',$data);
 		}
 		function test_email(){
 			$this->email->from('dailynews@wpilife.org', 'WPILIFE');
@@ -57,17 +57,11 @@
 			$this->email->message($message);
 			$this->email->send();
 		}
-		function sendDailyNewsEmail($sell_list){
+		function sendDailyNewsEmail($data){
 			$this->email->from('no-reply@wpilife.org', 'WPILIFE');
 			$this->email->to('cssa@wpi.edu'); 
 			$this->email->subject('WPILIFE 每日精选');
 			$this->email->set_alt_message("This is an HTML email, please enable your client's support for HTML email to view the full message");
-			$msg = file_get_contents($_SERVER['DOCUMENT_ROOT']."/msg.txt");
-			$data = array(
-				'today'		=>date('Y-m-d'),
-				"msg" =>$msg ,
-				'sell_list' 	=> $sell_list,
-				);
 			$message = $this->parser->parse('templates/dailynews_email/dailynews_email_body', $data, TRUE);
 			$this->email->message($message);	
 			$this->email->send();

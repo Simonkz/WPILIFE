@@ -71,9 +71,30 @@
 	</HEAD>
 
 	<div class="container" style="overflow: hidden;">
-	<h1> <?php echo $today?></h1>
-	<p><?php echo $msg?></p>
-	{sell_list}
+	<h1> <?php echo date("Y-m-d") ?></h1>
+	<p><?php echo $msg ?></p>
+	<h1>Sell List</h1>
+	<?php echo $sell_list ?>
+	<div style="clear:both"></div>
+	<br/>
+	<h1>Demand List</h1>
+	<?php foreach($demand_list as $item){ ?>
+		<div class="post">
+			<a href="/wpilife/pohs/detail/<?php echo $item["shop_id"] ?>"><h2><?php echo $item["shop_title"] ?></h2></a>
+			<p>
+			<?php $content = strip_tags($item["shop_content"]);
+				if(count($content) > 180) echo substr($content, 0, 180);
+				else echo $content;
+			 ?>
+			</p>
+		</div>
+	<?php } ?>
+	<h1>What's New in BBS</h1>
+	<ul>
+	<?php foreach($bbs_list as $item){ ?>
+		<li><a href="/bbs/show/<?php echo $item["bbs_id"] ?>"><?php echo $item["bbs_title"] ?></a></li>
+	<?php } ?>
+	</ul>	
 	</div>
 
 

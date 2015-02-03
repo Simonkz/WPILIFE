@@ -23,9 +23,6 @@
 <div id="wrapper">
 <?php $this->load->view('includes/header');?>
 <div id="content">
-<div style="text-align:center;background:rgb(41,41,41)">
-	 <iframe width="560" height="315" src="//www.youtube.com/embed/ttXsSuDvBqM" frameborder="0" allowfullscreen></iframe>
-</div>
 <!-- LayerSlider  -->
 <section id="layerslider-container">
 	<div id="layerslider" style="width: 1020px; height: 300px; margin: 0 auto;">
