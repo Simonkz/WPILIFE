@@ -17,8 +17,8 @@ php.ini
 !images/shop/no_cover.png
 !images/shop/no_cover_small.png
 elfinder/files/*
-
+images/sponsors/*
 files/*
 captcha/*
 robots.txt
-
+*.txt
