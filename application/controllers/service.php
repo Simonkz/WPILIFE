@@ -46,6 +46,9 @@ class Service extends CI_Controller {
 		else{
 			$query=$this->db->query("select * from users join flight_info where users.users_id=flight_info.user_id");
 			$data['results']=$query->result();
+			print_r($data['results']);
+			
+			$data['results' ] = $this->filterbydate($data['results'],strtotime('2015-04-01'),strtotime('2015-10-01'));
 			$this->load->view("viewflight.php",$data);
 		}
 	}
@@ -88,7 +91,17 @@ class Service extends CI_Controller {
 			return null;
 		}
 	} 
-
+	private function filterbydate($data,$start,$end){
+		$result = array();
+		foreach ($data as $record){
+			$date =  strtotime($record->arrival_date);
+			if (($date>$start) && ($date<$end)){
+				array_push($result,$record);
+			}
+		}
+		print_r($result);
+		return($result);
+	}
 	public function tmpHouse(){
 		$data['title'] = "Temporary Residence | CSSA";
 		$data['info'] = "The Temporary Residence Page is Under Construction!";

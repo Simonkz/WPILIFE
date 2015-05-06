@@ -34,7 +34,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="input">Arrival Date:  <input type="date" name="date" required="required" /></td>
+					<td class="input">Arrival Date:  <input type="date" name="date" id="datepicker" required="required" /></td>
 				</tr>
 				<tr>
 					<td class="input">Arrival Time:  <input type="time" name="time" placeholder="Arrival time    " requried="required" /> </td>
@@ -65,6 +65,11 @@
 	</div>
 </div>
 <?php $this->load->view('includes/footer');?>
+<script>
+	$("#datepicker").datepicker({
+		inline: true
+	});
+</script>
 
 </body>
 </html>
