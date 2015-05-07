@@ -60,6 +60,11 @@
 				<th>Contact </th>
 			</tr></thead>
 			<tbody>
+			<?php if ((!isset($results)) or (!$results)){?>
+				<tr>
+					<td colspan="10" style="text-align: center;">No flights found</td>
+				</tr>
+			<?php }else{?>
 			<?php foreach($results as $row) { ?>
 				<tr>
 					<td> <?php echo $row->users_id ?> </td>
@@ -73,7 +78,8 @@
 					<td> <?php echo $row->luggage ?> </td> 
 					<td> <?php echo $row->contact ?> </td> 
 				</tr>
-			<?php } ?>
+			<?php }
+						} ?>
 			</tbody>
 		</table>
 		<h2> For used inside WPI CSSA only </h2>

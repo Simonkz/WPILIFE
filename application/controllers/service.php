@@ -18,15 +18,25 @@ class Service extends CI_Controller {
 			return;
 		}
 		else{
+			$period = $this->periodlib->getCurrentPeriod();
 			$history=self::checkexistance($this->session->userdata('users_id'));
+			if ($history){
+				$history = $this->filterbydate($history->result(), $this->periodlib->getDateFromPeriod($period),
+						$this->periodlib->getNextDateFromPeriod($period));
+			}			
 			if(!$history){
-				$this->load->view('flight_add');
+				$data['modify']=false;
+				$this->load->view('flight_add',$data);
 			}
 			else{
-				$data['title']='Error    |    WPI Life';
-				$data['info']='It seems that you have been already submitted a pick up information. If you want to change it, please contact <a href=mailto:wpilife@gmail.com"> wpilife@gmail.com </a>';
-				$this->load->view('templates/msgDisplay',$data);
-				}
+// 				$data['title']='Error    |    WPI Life';
+// 				$data['info']='It seems that you have been already submitted a pick up information. If you want to change it, please contact <a href=mailto:wpilife@gmail.com"> wpilife@gmail.com </a>';
+// 				$this->load->view('templates/msgDisplay',$data);
+// 				
+				$data['flight'] = $history[0];
+				$data['modify'] = true;
+				$this->load->view('flight_add',$data);
+			}
 		}
 		
 	}
@@ -56,7 +66,7 @@ class Service extends CI_Controller {
 			$data['results']=$query->result();
 			$data['date_start'] = $this->periodlib->getDateFromPeriod($data['period']);
 			$data['date_end'] = $this->periodlib->getNextDateFromPeriod($data['period']);
-			$data['results' ] = $this->filterbydate($data['results'],$data['date_start'],$data['date_end']);
+			$data['results'] = $this->filterbydate($data['results'],$data['date_start'],$data['date_end']);
 			$this->load->view("viewflight.php",$data);
 		}
 	}
@@ -77,7 +87,16 @@ class Service extends CI_Controller {
 			'luggage'=>$this->input->post('luggage'),
 			'user_id' => $this->session->userdata('users_id')
 		);
-		$this->db->insert('flight_info',$data);
+		switch ($this->input->post('update')){
+			case 'Update':
+				$this->db->where('user_id',$data['user_id']);
+				$this->db->where('f_id',$this->input->post('f_id'));
+				$this->db->update('flight_info',$data);
+				break;
+			case 'Submit':
+				$this->db->insert('flight_info',$data);
+				break;
+		}
 		$info['title']='Success     |    WPI Life';
 		$info['info']='Your flight information has been successfully saved';
 		$this->load->view('templates/msgDisplay',$info);
@@ -101,16 +120,19 @@ class Service extends CI_Controller {
 	} 
 	private function filterbydate($data,$start,$end){
 		$result = array();
-		echo "Start:" . $start . " End:" . $end;
 		foreach ($data as $record){
 			$date =  strtotime($record->arrival_date);
-			echo $date . ' ';
 			
 			if (($date>$start) && ($date<$end)){
 				array_push($result,$record);
 			}
 		}
-		return($result);
+		if ($result==array()){
+			return null;
+		}else{
+			return($result);
+		}
+		
 	}
 	public function tmpHouse(){
 		$data['title'] = "Temporary Residence | CSSA";
