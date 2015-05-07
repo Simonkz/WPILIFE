@@ -42,7 +42,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="input">Arrival Date:  <input type="date" name="date" id="datepicker" required="required" value="<?=($modify?date('m/d/Y',strtotime($flight->arrival_date)):"");?>"/></td>
+					<td class="input">Arrival Date:  <input type="text" name="date" id="datepicker" required="required" value="<?=($modify?date('m/d/Y',strtotime($flight->arrival_date)):"");?>"/></td>
 				</tr>
 				<tr>
 					<td class="input">Arrival Time:  <input type="time" name="time" placeholder="Arrival time    " requried="required" value="<?=($modify?$flight->arrival_time:"");?>"/> </td>
