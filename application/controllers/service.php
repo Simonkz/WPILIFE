@@ -3,6 +3,7 @@
 class Service extends CI_Controller {
 	function __construct() {
  		parent::__construct();
+ 		$this->load->library('Periodlib');	
 	}
 
 	public function index() {
@@ -31,6 +32,13 @@ class Service extends CI_Controller {
 	}
 	
 	public function showpickup(){
+		if ( $this->input->get('period')==null){
+			$data['period'] = $this->periodlib->getCurrentPeriod();
+		}else{
+			$data['period'] = $this->input->get('period');
+		}
+		echo $data['period'];
+		
 		if($this->session->userdata('users_id')==null){
 			$data['title'] = "Airport Pickup  | CSSA";
 			$data['info'] = "You should <a href='http://wpilife.org/login?ref=http://wpilife.org/service/showpickup'>login</a> first!";
@@ -46,9 +54,9 @@ class Service extends CI_Controller {
 		else{
 			$query=$this->db->query("select * from users join flight_info where users.users_id=flight_info.user_id");
 			$data['results']=$query->result();
-			print_r($data['results']);
-			
-			$data['results' ] = $this->filterbydate($data['results'],strtotime('2015-04-01'),strtotime('2015-10-01'));
+			$data['date_start'] = $this->periodlib->getDateFromPeriod($data['period']);
+			$data['date_end'] = $this->periodlib->getNextDateFromPeriod($data['period']);
+			$data['results' ] = $this->filterbydate($data['results'],$data['date_start'],$data['date_end']);
 			$this->load->view("viewflight.php",$data);
 		}
 	}
@@ -93,13 +101,15 @@ class Service extends CI_Controller {
 	} 
 	private function filterbydate($data,$start,$end){
 		$result = array();
+		echo "Start:" . $start . " End:" . $end;
 		foreach ($data as $record){
 			$date =  strtotime($record->arrival_date);
+			echo $date . ' ';
+			
 			if (($date>$start) && ($date<$end)){
 				array_push($result,$record);
 			}
 		}
-		print_r($result);
 		return($result);
 	}
 	public function tmpHouse(){

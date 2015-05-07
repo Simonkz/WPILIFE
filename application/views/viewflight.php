@@ -30,6 +30,21 @@
 	<div id="content">
 		<h1> Airport Pickup Management System  </h1>
 		
+		<table id="periods">
+			<tr>
+				<?php 
+					$n = $this->periodlib->periodtonum($this->periodlib->getCurrentPeriod());
+					echo "Period No." . $n;
+					for ($i=0;$i<=$n;$i++){
+						$P = $this->periodlib->numtoperiod($i);?>
+					<td><a href="showpickup?period=<?=$P ?>"><?=$P;?></a></td>
+				<?php }?>
+			</tr>
+		</table>
+		<div>Now displaying flights from semester <?=$period;?>, which from 
+		<span style="color: red"><?php echo date('Y-m-d',$this->periodlib->getDateFromPeriod($period));?></span>
+		to <span style="color: red"><?php echo date('Y-m-d',$this->periodlib->getNextDateFromPeriod($period));?></span>
+		</div>
 		<table id="table_results">
 			<thead>
 			<tr style="border-collapse: collapse;">
