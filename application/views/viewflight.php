@@ -34,7 +34,6 @@
 			<tr>
 				<?php 
 					$n = $this->periodlib->periodtonum($this->periodlib->getCurrentPeriod());
-					echo "Period No." . $n;
 					for ($i=0;$i<=$n;$i++){
 						$P = $this->periodlib->numtoperiod($i);?>
 					<td><a href="showpickup?period=<?=$P ?>"><?=$P;?></a></td>

@@ -47,7 +47,6 @@ class Service extends CI_Controller {
 		}else{
 			$data['period'] = $this->input->get('period');
 		}
-		echo $data['period'];
 		
 		if($this->session->userdata('users_id')==null){
 			$data['title'] = "Airport Pickup  | CSSA";
