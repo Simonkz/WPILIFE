@@ -50,7 +50,7 @@
 			<section id="suvivalCover">
 				<section id="coverHeader">
 					<article>
-						2013 - 2014<br/>WPI<br/>CSSA Survival Guide
+						2015 - 2016<br/>WPI<br/>CSSA Survival Guide
 					</article>
 				
 				</section>
@@ -60,7 +60,7 @@
 				<section id="coverFoot">
 					<table width="100%">
 						<tr>
-							<td>Worcester Polytechnic Institute <br/> 2013 / 05<br/></td>
+							<td>Worcester Polytechnic Institute <br/> 2015 / 05<br/></td>
 							<td><img src="<?php echo base_url();?>images/wpilife/wpilife.png" alt="wpilife suvival guide"></td>
 						</tr>
 					</table>
