@@ -32,7 +32,8 @@ class Activatelib
         $link='';
         $q = $this->CI->db->get_where("active_link", array("user_id" => $uid, "type"=>0));
         if($q->num_rows()>0){
-            $link = $q->row_array()['link'];
+            $user = $q->row_array();
+            $link = $user['link'];
         }
         return $link;
     }
