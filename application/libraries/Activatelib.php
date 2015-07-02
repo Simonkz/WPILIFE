@@ -6,11 +6,12 @@ class Activatelib
     public function __construct()
     {
         $this->CI =& get_instance();
+        $this->CI->load->library('parser');
+        $this->CI->load->library("email");
     }
 
     function send_activation_email($to_email, $link)
     {
-        $this->CI->load->library('parser');
         $this->CI->email->from('no-reply@wpilife.org', 'WPILIFE');
         $this->CI->email->to($to_email);
         $this->CI->email->subject('Your Passcode Has Been Set | WPILIFE');
