@@ -10,10 +10,10 @@ class Activatelib
 
     function send_activation_email($to_email, $link)
     {
-        $this->load->library('parser');
-        $this->email->from('no-reply@wpilife.org', 'WPILIFE');
-        $this->email->to($to_email);
-        $this->email->subject('Your Passcode Has Been Set | WPILIFE');
+        $this->CI->load->library('parser');
+        $this->CI->email->from('no-reply@wpilife.org', 'WPILIFE');
+        $this->CI->email->to($to_email);
+        $this->CI->email->subject('Your Passcode Has Been Set | WPILIFE');
 
         $data = array(
             'email' 	=> $to_email,
@@ -22,9 +22,9 @@ class Activatelib
             'baseUrl'	=> base_url(),
             'loginLink' => base_url() ."login/?account=".$to_email
         );
-        $message = $this->parser->parse('templates/activationEmail', $data, TRUE);
-        $this->email->message($message);
-        $this->email->send();
+        $message = $this->CI->parser->parse('templates/activationEmail', $data, TRUE);
+        $this->CI->email->message($message);
+        $this->CI->email->send();
 
     }
 
