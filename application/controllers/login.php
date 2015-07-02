@@ -35,7 +35,7 @@ class Login extends CI_Controller
 		{
 			switch($temp["code"]){
 				case 1:
-					$this->load->view("account/resend_activate_email",$temp["uid"]);
+					$this->load->view("account/resend_activate_email",array("uid"=>$temp["uid"]));
 					break;
 				case 2:
 					echo "<script> alert ('Email or Password Wrong! = (');</script>";
