@@ -31,13 +31,11 @@ class Login extends CI_Controller
 		$tmp = do_hash($password, 'md5');
 		$passwordMD5 = do_hash($salt.$tmp, 'md5'); // MD5
 		$temp=$this->users->login($email, $passwordMD5);
-		if($temp != 0)
+		if(!$temp["succeed"])
 		{
-			switch($temp){
+			switch($temp["code"]){
 				case 1:
-					$data['title']="ERROR   |   WPILIFE";
-					$data['info']="You are not activated! If you cannot receive active link, please contact me with you email address.<br/><a href='mailto:kwang3@wpi.edu'>Click Here to write to me</a><br/>如果不能收到激活邮件，请将你的注册邮箱发送至<a href='mailto:kwang3@wpi.edu'>Admin</a>，我们会手动激活您的账号";
-					$this->load->view("templates/msgDisplay",$data);
+					$this->load->view("account/resend_activate_email",$temp["uid"]);
 					break;
 				case 2:
 					echo "<script> alert ('Email or Password Wrong! = (');</script>";
