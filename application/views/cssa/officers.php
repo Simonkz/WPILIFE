@@ -49,7 +49,7 @@
 
  
  <?php
- print_r($officers);
+// print_r($officers);
 	if($officers)
 	{
 		$count = 0;
