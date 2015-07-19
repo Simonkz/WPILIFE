@@ -50,7 +50,7 @@
 					<td>
 						<input type="submit" value="Register" />
 						<br/><br/>
-						Password will be sent to your email
+						An Activate link will be sent to your email
 					</td>
 				</tr>
 			</table>

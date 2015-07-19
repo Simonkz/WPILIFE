@@ -114,9 +114,10 @@ class Users
 
 	public function login($email, $password)
 	{
+		$result['succeed'] = false;
+		$result['code'] = 0;
 		$this->CI->db->where('users_email_address', $email);
 		$this->CI->db->where('users_password', $password);
-	//	$this->CI->db->where('users_activated',1);
 		$query = $this->CI->db->get('users');
 
 		if ($query->num_rows() > 0)
@@ -138,16 +139,22 @@ class Users
 					$this->CI->session->set_userdata('cssa_id', $cssa_row['id']);
 				}
 				$this->updateRecentLoginTime($row['users_id']);
-				return 0;   	
+				$result['succeed'] = true;
 			}
-			else
+			else //User is not activated
 			{
-				return 1;
+				$result['succeed'] = false;
+				$result['msg'] = 'Not activated';
+				$result['code'] = 1;
+				$result['uid'] = $row["users_id"];
 			}
 		}
 		else{
-			return 2;
-		}	
+			$result['succeed'] =false;
+			$result['msg'] = "Wrong Password";
+			$result['code'] = 2;
+		}
+		return $result;
 	}
 
 	public function get_user_info($users_id)

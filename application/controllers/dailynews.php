@@ -1,5 +1,5 @@
 <?php
-	class dailynews extends CI_Controller 
+	class dailynews  extends CI_Controller 
 	{
 		function __construct()
 		{
@@ -9,7 +9,11 @@
 		}
 		
 		function index()
-		{
+		{	
+			if(!$this->input->is_cli_request()){
+				echo "Permission Denied";
+				return;
+			}
 			$today = date('Y-m-d')." 21:00:00";
 			$yesterday = date('Y-m-d',strtotime("-7 days"));
 			$query = $this->db->query("SELECT * FROM `shop` WHERE shop_type='SELL' AND shop_date BETWEEN ? AND ? ORDER BY shop_date DESC", array($yesterday,$today));

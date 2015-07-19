@@ -7,8 +7,7 @@ class Signup extends CI_Controller
 	{
  		parent::__construct();
 		$this->load->library('captchalib');
-		$this->load->library('email');
-		$this->load->library('parser');
+		$this->load->library('activatelib');
 	}	
 	function index()
 	{	
@@ -49,9 +48,9 @@ class Signup extends CI_Controller
 				$link=$this->users->addNewUser($userDataArray);
 				if(strlen($link)==32){
 					// send passcode to costomer
-					$this->sendActivationEmail($email,base_url().'login/activeuser/'.$link);
+					$this->activatelib->send_activation_email($email,$link);
 					$data['title'] = "Sign Up successfully | WPILIFE";
-					$data['info'] = "Succeed<br/>An e-mail contains active link has been sent to your email<br/>Mailserver is down: In case you can't receive the email , please write to <a href='mailto:kwang3@wpi.edu'>me</a> with your email and name<br/>如果没有收到邮件，请<a href='mailto:kwang3@wpi.edu'>点此处</a>告诉我们你的姓名和邮箱，我们会为您手动激活";
+					$data['info'] = "Succeed<br/>An e-mail contains active link has been sent to your email<br/>";
 				}
 				else{
 					$data['title']="Oops   |     WPILIFE";
@@ -91,25 +90,4 @@ class Signup extends CI_Controller
 		return false;
 	}
 
-	function sendActivationEmail($to_email, $password)
-	{
-		$this->load->library('parser');
-		$this->email->from('no-reply@wpilife.org', 'WPILIFE');
-		$this->email->to($to_email); 
-		$this->email->subject('Your Passcode Has Been Set | WPILIFE');
-
-		$data = array(
-			'email' 	=> $to_email,
-			'password' 	=> $password,
-			'year'		=> date('Y'),
-			'baseUrl'	=> base_url(),
-			'loginLink' => base_url() ."login/?account=".$to_email
-			);
-		$message = $this->parser->parse('templates/activationEmail', $data, TRUE);
-		$this->email->message($message);	
-		$this->email->send();
-		
-	}
-		
-} 
-?>
+}

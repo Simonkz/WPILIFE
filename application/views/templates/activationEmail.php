@@ -475,7 +475,7 @@ table.large-button td a:visited {
 
 							<h3>Hi, </h3>
 							<p>Thanks for signing up for WPILIFE, your login is:<b> {email} </b></p>
-							<p>And the passcode for login is <b style="color:red; font-size: 20px;"> {password} </b> [Take care of your passcode].</p>
+							<p>And the passcode for login is <b style="color:red; font-size: 20px;"> {link} </b> [Take care of your passcode].</p>
 
 						  </td>
 						  <td class="expander"></td>
