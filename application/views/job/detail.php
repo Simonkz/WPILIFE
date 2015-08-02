@@ -3,7 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<title><?php echo $title;?></title>
-	<?php $this->load->view('includes/import');?>
+	<?php $this->load->view('includes/import');
+				$this->load->library('urllib');?>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$('.job_tab').attr('id', 'current');
@@ -57,7 +58,7 @@
 					<span><i class="halflings user"></i>By <?php echo $job['users_firstname']." ".$job['users_lastname']; ?>&nbsp;&nbsp;&nbsp;&nbsp;<i class="halflings tag"></i><?php echo anchor('ext/jobType/'.$job['id'], $job['name']); ?></span>
 				</header>
 
-				<?php echo $job['content']; ?>
+				<?php echo $this->urllib->filter($job['content']); ?>
 				<br class="clearfix"/>
 				<?php if(trim($job['file']) != "") echo "<b>Attachment</b>: ".anchor('files/job/'.$job['file'], $job['file'], 'target="_blank"').br(1);?>
 				<br class="clearfix"/>

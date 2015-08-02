@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 	<title><?php echo $title;?></title>
-	<?php $this->load->view('includes/import');?>
+	<?php $this->load->view('includes/import');
+				$this->load->library('urllib');?>
 	<script type="text/javascript">
 		$(document).ready(function() 
 		{
@@ -57,7 +58,7 @@
 					<span><i class="halflings user"></i>By <?php echo anchor('wpilife/pohs/detail/'.$item['user_id'],$item['users_firstname']." ".$item['users_lastname']); ?></span>
 				</header>
 
-				<?php echo $item['shop_content']; ?>
+				<?php echo $this->urllib->filter($item['shop_content']); ?>
 
 			
 				<!-- Baidu Button BEGIN -->

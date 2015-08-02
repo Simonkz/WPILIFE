@@ -3,7 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<title>House Detail | WPILIFE</title>
-	<?php $this->load->view('includes/import');?>
+	<?php $this->load->view('includes/import');
+				$this->load->library('urllib');?>
 	<script type="text/javascript">
 		$(document).ready(function() 
 		{
@@ -82,7 +83,7 @@
 
 						</table>
 						<br/>
-						<?php echo $house['des']; ?>
+						<?php echo $this->urllib->filter($house['des']); ?>
 
 					</div>
 

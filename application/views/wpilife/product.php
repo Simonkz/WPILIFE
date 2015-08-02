@@ -3,7 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<title><?php echo $title; ?></title>
-	<?php $this->load->view('includes/import');?>
+	<?php $this->load->view('includes/import');
+				$this->load->library('urllib');?>
 	<script type="text/javascript">
 		$(document).ready(function() 
 		{
@@ -78,7 +79,7 @@
 				<!-- Tabs Content -->
 				<div class="tabs-container">
 					<div class="tab-content" id="tab1">
-						<?php echo $product['shop_content']; ?>
+						<?php echo $this->urllib->filter($product['shop_content']); ?>
 
 					</div>
 
