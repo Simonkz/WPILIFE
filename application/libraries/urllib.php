@@ -23,7 +23,7 @@ class urllib
 	}
 */
 	public function filter($str){
-		$temp = strtolower($str);
+		$temp = $str;
 		$rootname = "((cn)|(com))";
 		//lefsfevdehuoesfe.letv17sz.cn/view.asp?type=19&id=vip078
 		$pattern = "/((http|https):\/\/)?(([a-z0-9\-]+\.)+" 					//非根域名部分	lefsfevdehuoesfe.letv17sz.
@@ -33,7 +33,7 @@ class urllib
 						. "([a-z0-9\-]+\.?[a-z0-9\-]*\/*)?"		//文件名部分		view.asp
 						. "\??([a-z0-9\-]+(=[a-z0-9\-]*)?(&(amp;)?)?)*|"
 						. '<a.*a>'
-						. "/";											//ending
+						. "/i";											//ending
 		
 		preg_match_all($pattern, $temp,$matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
 		/*
@@ -52,7 +52,7 @@ class urllib
 		foreach ($matches as $match){
 			$str .= "</br > Found URL:\t" . $match[0][0] . "</br >Hostname:\t";
 			if (substr($match[0][0],0,1)=="<"){
-				preg_match_all('/href=(["\'])(.*?)(["\'])/', $match[0][0], $extract, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
+				preg_match_all('/href=(["\'])(.*?)(["\'])/i', $match[0][0], $extract, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
 //				$str .= print_r($extract, true);
 				$suffix .= $extract[0][2][0] . "</br >";
 			}else{
