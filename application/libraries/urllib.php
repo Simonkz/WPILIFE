@@ -73,8 +73,8 @@ class urllib
 		
 //		$new .= "</br ><pre>" . $pattern. "</pre></br >";
 //		$new .= "<pre>" . print_r($m, true) . "</pre>";
-		$new .= "<pre>" . print_r($matches, true) . "</pre>";
-		$new .= $suffix;
+//		$new .= "<pre>" . print_r($matches, true) . "</pre>";
+//		$new .= $suffix;
 		return $new;
 	}
 	// http://ellislab.com/codeigniter/user-guide/helpers/captcha_helper.html
