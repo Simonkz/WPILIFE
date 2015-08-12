@@ -22,3 +22,5 @@ files/*
 captcha/*
 robots.txt
 *.txt
+.idea/
+
