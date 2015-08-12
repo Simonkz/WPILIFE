@@ -3,7 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<title><?php echo $title;?></title>
-	<?php $this->load->view('includes/import');?>
+	<?php $this->load->view('includes/import');
+				$this->load->library('urllib');?>
 	<script type="text/javascript">
 		$(document).ready(function()  {
 			$('.bbs_tab').attr('id', 'current');
@@ -50,7 +51,7 @@
 			<br />
 			
 			<div class="eleven columns">
-				<?php echo $bbs['bbs_text'];?>
+				<?php echo $this->urllib->filter($bbs['bbs_text']);?>
 				<!-- Baidu Button BEGIN -->
 				<div id="bdshare" class="bdshare_t bds_tools get-codes-bdshare">
 				<a class="bds_tsina"></a>

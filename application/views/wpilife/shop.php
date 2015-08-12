@@ -3,7 +3,9 @@
 <head>
 	<meta charset="utf-8">
 	<title>Shop | WPILIFE</title>
-	<?php $this->load->view('includes/import');?>
+	<?php
+		$this->load->view('includes/import');
+		?>
 	<script type="text/javascript">
 		$(document).ready(function() 
 		{
