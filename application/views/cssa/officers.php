@@ -51,6 +51,7 @@
  <?php
 	if($officers)
 	{
+//		print_r($officers);
 		$count = 0;
 		foreach($officers as $officer)
 		{
@@ -61,7 +62,7 @@
  			<div class="people-listing">
  				 <div class="captioned-content">
     			<a href="#">
-      			<img src="<?php echo base_url();?>images/officers/<?php echo $director[0]->photo;?>" alt="<?php echo $director[0]->name;?>">
+      			<img src="<?php echo base_url();?>images/officers/<?php echo $year . "/" . $director[0]->photo;?>" alt="<?php echo $director[0]->name;?>">
    			 </a>
     			<p><?php echo $director[0]->name;?></p>
   			</div>
