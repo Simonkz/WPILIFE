@@ -20,7 +20,6 @@ class Slidelib
 			// loop over the directory. 
 			while (false !== ($file = readdir($handle))) {
 				if ($file[0] != "." ) {
-					
 					$ext = strtolower(array_pop(explode('.',$file)));
 					$txtFile = str_replace($ext,'txt',$file); // Potential Bug, fix later  if file name="jpgslide1.jpg" ----> "txtslide1.txt"
 					$linkFile = str_replace($ext,'link',$file); // Potential Bug

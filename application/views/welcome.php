@@ -177,7 +177,7 @@
 					<span class="month"><?php echo substr($row->blogs_month, 0, 3); ?></span>
 				</section>
 				<h4><a href="<?php echo base_url()?>cssa/blog/<?php echo $row->blogs_id; ?>"><?php echo $row->blogs_title; ?></a></h4>
-				<p><?php echo mb_substr(strip_tags($row->blogs_content), 0, 80); ?>...</p>
+				<p><?php echo substr(strip_tags($row->blogs_content), 0, 80); ?>...</p>
 			</article>
 		</div>
 		<?php
