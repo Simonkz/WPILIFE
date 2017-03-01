@@ -122,7 +122,7 @@ class Blogcssalib
 	{
 		$query = $this->CI->db->query("SELECT DISTINCT blogs_year, blogs_month 
 									   FROM cssa_blogs 
-									   ORDER BY blogs_id DESC ");
+									   ORDER BY blogs_year DESC ");
 		if ($query->num_rows() > 0)
 		{
 			$result = $query->result(); 

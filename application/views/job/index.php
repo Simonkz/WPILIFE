@@ -60,7 +60,7 @@
 				<span><i class="halflings tag"></i> <?php echo anchor( "ext/jobType/".$row->type_id,$row->name); ?></span>
 			</header>
 			<p>
-			<?php echo mb_substr(strip_tags($row->content), 0, 140); ?>...
+			<?php echo substr(strip_tags($row->content), 0, 140); ?>...
 			</p>
 			<a href="<?php echo base_url()?>ext/job/<?php echo $row->id; ?>" class="button color">Read More</a>
 
