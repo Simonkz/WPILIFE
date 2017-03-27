@@ -67,7 +67,7 @@
 				<span><i class="halflings user"></i>By <?php echo $row->users_firstname." ".$row->users_lastname; ?></span>
 			</header>
 			<p>
-			<?php echo mb_substr(strip_tags($row->content), 0, 140); ?>...
+			<?php echo substr(strip_tags($row->content), 0, 140); ?>...
 			</p>
 			<a href="<?php echo base_url()?>cssa/blog/<?php echo $row->id; ?>" class="button color">Read More</a>
 

@@ -62,7 +62,7 @@
 	?>
 		<tr>
 			<td><?php echo $index;?></td>
-			<td><?php echo anchor('bbs/show/'.$row['bbs_id'], mb_substr(strip_tags($row['bbs_title']), 0, 32)."...", array('title' => $row['bbs_title']));?></td>
+			<td><?php echo anchor('bbs/show/'.$row['bbs_id'], substr(strip_tags($row['bbs_title']), 0, 32)."...", array('title' => $row['bbs_title']));?></td>
 			<td><?php echo $row['users_firstname']." ". $row['users_lastname'];?></td>
 			<td><?php echo $row['bbs_time'];?></td>
 		</tr>

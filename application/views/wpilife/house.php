@@ -68,7 +68,7 @@
 				<span><i class="halflings user"></i>By <?php echo $row->users_firstname." ".$row->users_lastname; ?></span>
 			</header>
 			<p>
-			<?php echo mb_substr(strip_tags($row->des), 0, 140); ?>...
+			<?php echo substr(strip_tags($row->des), 0, 140); ?>...
 			</p>
 			<a href="<?php echo base_url()?>wpilife/house/getHouse/<?php echo $row->house_id; ?>" class="button color">Read More</a>
 
