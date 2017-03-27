@@ -20,7 +20,6 @@
 
 				<ul class="contact-informations second">
 					<li><i class="halflings envelope"></i> <p><a href="mailto:wpilife@gmail.com">wpilife@gmail.com</a></p></li>
-					<li><i class="halflings globe"></i> <p><a href="http://sbzhouhao.net/">http://sbzhouhao.net/</a></p></li>
 				</ul>
 
 			</div>

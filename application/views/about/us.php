@@ -79,7 +79,7 @@
 	
 	<!-- About -->
 	<div class="one-third column">
-		<a href="http://sbzhouhao.net/about/" target="_blank">
+		<a href="https://hzhou.me/about/" target="_blank">
 			<img src="<?php echo base_url();?>images/avatar/crazyegg.png" alt=""/>
 		</a>
 		<div class="team-name"><h5>Crazy Egg</h5> </div>

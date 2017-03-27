@@ -36,7 +36,6 @@
 			<h4>Link</h4>
 			<ul id="link" style="font-size:larger; padding-bottom: 5px;">
 				<li><i class="halflings white link"></i> <a href="http://mitchief.org/">MIT-CHIEF</a></li>
-				<li><i class="halflings white link"></i> <a href="http://sbzhouhao.net/">CrazyEgg</a></li>
 			</ul>
 				
 			<div class="clearfix"></div>
